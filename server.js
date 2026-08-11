@@ -3,31 +3,28 @@ const cors = require('cors');
 const axios = require('axios');
 const app = express();
 
-// Enable CORS security rules so your local web browser can speak to this server without blocking errors
 app.use(cors());
 app.use(express.json());
 
-// Pulls your secret token securely from the Render dashboard environment variable settings
-const SQUAD_SECRET_KEY = process.env.SQUAD_SECRET_KEY; 
-const SQUAD_BASE_URL = "https://squadco.com"; 
+const SQUAD_SECRET_KEY = process.env.SQUAD_SECRET_KEY;
+const SQUAD_BASE_URL = "https://sandbox-api-d.squadco.com";
 
 app.post('/create-customer-account', async (req, res) => {
     try {
         const { first_name, last_name, email, phone, bvn } = req.body;
 
-        // Structured payload required by the Squad Sandbox Virtual Account endpoint
         const squadPayload = {
             first_name: first_name,
             last_name: last_name,
             email: email,
             phone_number: phone,
-            bvn: bvn,             
+            bvn: bvn,
             currency_code: "NGN"
         };
 
         const response = await axios.post(
-            `${SQUAD_BASE_URL}/virtual-account`, 
-            squadPayload, 
+            `${SQUAD_BASE_URL}/virtual-account`,
+            squadPayload,
             {
                 headers: {
                     'Authorization': `Bearer ${SQUAD_SECRET_KEY}`,
@@ -52,7 +49,7 @@ app.post('/create-customer-account', async (req, res) => {
     }
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
     console.log(`Your AI payment server is running live on port ${PORT}`);
 });
